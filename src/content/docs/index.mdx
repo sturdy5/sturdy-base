@@ -1,0 +1,40 @@
+---
+title: Sturdy Base
+description: A knowledge base covering IT infrastructure, application development, and Kubernetes.
+template: splash
+hero:
+  tagline: A curated knowledge base covering IT infrastructure, software architecture, and Kubernetes orchestration.
+  image:
+    file: ../../assets/logo.svg
+  actions:
+    - text: Explore IT Infrastructure
+      link: /sturdy-base/it/
+      icon: right-arrow
+    - text: Kubernetes Runbooks
+      link: /sturdy-base/kubernetes/
+      icon: external
+      variant: secondary
+    - text: GitHub Repository
+      link: https://github.com/sturdy5/sturdy-base
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Knowledge Pillars
+
+<CardGrid stagger>
+	<Card title="IT & Systems Infrastructure" icon="setting">
+		Foundations of systems administration, networking protocols (OSI, TCP/IP, DNS), Linux server management, and security baselines.
+	</Card>
+	<Card title="Application Development" icon="laptop">
+		Modern software engineering practices, Twelve-Factor design patterns, API architecture, and resilient distributed systems.
+	</Card>
+	<Card title="Kubernetes & Cloud Native" icon="puzzle">
+		Cluster architecture, control plane internals, production workloads, networking, and practical `kubectl` cheat sheets.
+	</Card>
+	<Card title="Fast Search & Navigation" icon="magnifier">
+		Built-in full-text search with Pagefind and hierarchical navigation to quickly surface commands, guides, and notes.
+	</Card>
+</CardGrid>
