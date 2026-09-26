@@ -1,0 +1,64 @@
+---
+title: Kubectl Plugins
+description: A guide to using plugins with `kubectl` and `oc`
+sidebar:
+  order: 3
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+    Showing standard Kubernetes (**`kubectl`**) commands.
+  </TabItem>
+  <TabItem label="oc">
+    Showing Red Hat OpenShift (**`oc`**) commands.
+  </TabItem>
+</Tabs>
+
+A guide to using plugins with `kubectl` or `oc`
+
+## Creating Plugins
+
+You can create plugins simply by adding a binary on your `PATH` that takes the following format:
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+
+```bash
+kubectl-add-command
+```
+
+  </TabItem>
+  <TabItem label="oc">
+
+```bash
+oc-add-command
+```
+
+  </TabItem>
+</Tabs>
+
+Then when you need to call it, you can use the commands without the dashes in command.
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+
+```bash
+kubectl add command
+```
+
+  </TabItem>
+  <TabItem label="oc">
+
+```bash
+oc add command
+```
+
+  </TabItem>
+</Tabs>
+
+I've done this with both vendor provided plugins as well as writing my own.
+
+For vendor plugins, check out the Red Hat documentation for the [`oc-compliance` plugin](https://docs.okd.io/latest/security/compliance_operator/co-scans/oc-compliance-plug-in-using.html).
+

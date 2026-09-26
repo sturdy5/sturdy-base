@@ -10,7 +10,7 @@ export default defineConfig({
 		starlight({
 			title: 'Sturdy Base',
 			logo: {
-				src: './src/assets/logo.svg',
+				src: './src/assets/sturdy-design-logo-transparent.png',
 			},
 			social: [
 				{

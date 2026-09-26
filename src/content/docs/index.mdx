@@ -5,7 +5,7 @@ template: splash
 hero:
   tagline: A curated knowledge base covering IT infrastructure, software architecture, and Kubernetes orchestration.
   image:
-    file: ../../assets/logo.svg
+    file: ../../assets/sturdy-design-logo-transparent.png
   actions:
     - text: Explore IT Infrastructure
       link: /sturdy-base/it/
@@ -20,21 +20,24 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 ## Knowledge Pillars
 
 <CardGrid stagger>
-	<Card title="IT & Systems Infrastructure" icon="setting">
-		Foundations of systems administration, networking protocols (OSI, TCP/IP, DNS), Linux server management, and security baselines.
-	</Card>
-	<Card title="Application Development" icon="laptop">
-		Modern software engineering practices, Twelve-Factor design patterns, API architecture, and resilient distributed systems.
-	</Card>
-	<Card title="Kubernetes & Cloud Native" icon="puzzle">
-		Cluster architecture, control plane internals, production workloads, networking, and practical `kubectl` cheat sheets.
-	</Card>
-	<Card title="Fast Search & Navigation" icon="magnifier">
-		Built-in full-text search with Pagefind and hierarchical navigation to quickly surface commands, guides, and notes.
-	</Card>
+  <LinkCard
+    title="IT & Systems Infrastructure"
+    description="Foundations of systems administration, networking protocols (OSI, TCP/IP, DNS), Linux server management, and security baselines."
+    href="/sturdy-base/it/"
+  />
+  <LinkCard
+    title="Application Development"
+    description="Modern software engineering practices, API architecture, and resilient distributed systems."
+    href="/sturdy-base/app-dev/"
+  />
+  <LinkCard
+    title="Kubernetes & Cloud Native"
+    description="Cluster architecture, control plane internals, production workloads, networking, and practical kubectl cheat sheets."
+    href="/sturdy-base/kubernetes/"
+  />
 </CardGrid>

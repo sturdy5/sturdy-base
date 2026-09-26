@@ -1,0 +1,111 @@
+---
+title: Useful Kubectl Commands
+description: Quick-reference cheat sheet for day-to-day cluster operations.
+sidebar:
+  order: 4
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+    Showing standard Kubernetes (**`kubectl`**) commands.
+  </TabItem>
+  <TabItem label="oc">
+    Showing Red Hat OpenShift (**`oc`**) commands.
+  </TabItem>
+</Tabs>
+
+A curated collection of practical commands for debugging and cluster management.
+
+## Inspecting Workloads
+
+### Pods
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+
+```bash
+# List all pods with node placement and IP
+kubectl get pods -A -o wide
+
+# Sort pods by restart count
+kubectl get pods -A --sort-by='.status.containerStatuses[0].restartCount'
+
+# View pod logs with timestamps and follow
+kubectl logs -f deployment/my-app --timestamps --tail=100
+```
+
+  </TabItem>
+  <TabItem label="oc">
+
+```bash
+# List all pods with node placement and IP
+oc get pods -A -o wide
+
+# Sort pods by restart count
+oc get pods -A --sort-by='.status.containerStatuses[0].restartCount'
+
+# View pod logs with timestamps and follow
+oc logs -f deployment/my-app --timestamps --tail=100
+```
+
+  </TabItem>
+</Tabs>
+
+### Nodes
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+
+```bash
+# Check node conditions and resource consumption
+kubectl top nodes
+kubectl describe nodes | grep -A 8 "Conditions:"
+
+# Drain a node for maintenance
+kubectl drain <node-name> --ignore-daemonsets --delete-emptydir-data
+```
+
+  </TabItem>
+  <TabItem label="oc">
+
+```bash
+# Check node conditions and resource consumption
+oc adm top nodes
+oc describe nodes | grep -A 8 "Conditions:"
+
+# Drain a node for maintenance
+oc adm drain <node-name> --ignore-daemonsets --delete-emptydir-data
+```
+
+  </TabItem>
+</Tabs>
+
+### Events & Debugging
+
+<Tabs syncKey="k8s-cli">
+  <TabItem label="kubectl">
+
+```bash
+# Get sorted cluster events to pinpoint issues
+kubectl get events -A --sort-by='.metadata.creationTimestamp'
+
+# Launch an ephemeral debug container inside a pod
+kubectl debug -it <pod-name> --image=nicolaka/netshoot --target=<container-name>
+```
+
+  </TabItem>
+  <TabItem label="oc">
+
+```bash
+# Get sorted cluster events to pinpoint issues
+oc get events -A --sort-by='.metadata.creationTimestamp'
+
+# Launch an ephemeral debug container inside a pod
+oc debug -it <pod-name> --image=nicolaka/netshoot --target=<container-name>
+```
+
+  </TabItem>
+</Tabs>
+
