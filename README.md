@@ -39,14 +39,10 @@ src/content/docs/
 ├── index.mdx                       # Homepage / Landing page
 ├── it/                             # IT & Systems Infrastructure
 │   ├── index.md                    # IT section landing
-│   └── networking-basics.md        # Example guide
 ├── app-dev/                        # Application Development
 │   ├── index.md                    # App Dev section landing
-│   └── 12-factor-apps.md           # Example guide
 └── kubernetes/                     # Kubernetes & Cloud Native
     ├── index.md                    # Kubernetes section landing
-    ├── cluster-architecture.md     # Architectural overview
-    └── useful-kubectl-commands.md  # Interactive tabs & cheat sheet
 ```
 
 ### Adding New Articles
@@ -71,11 +67,4 @@ Write in standard Markdown or MDX!
 
 ## 🚢 GitHub Pages Deployment
 
-This repository includes a GitHub Actions workflow in `.github/workflows/deploy.yml`.
-
-### One-Time GitHub Configuration:
-1. Go to your GitHub repository: `https://github.com/sturdy5/sturdy-base`
-2. Navigate to **Settings** > **Pages**.
-3. Under **Build and deployment** > **Source**, select **GitHub Actions**.
-4. Push your code to the `main` branch. The action will build the site and deploy it to:
-   **`https://sturdy5.github.io/sturdy-base/`**
+This repository includes a GitHub Actions workflow in `.github/workflows/deploy.yml`. The site lives at **`https://sturdy5.github.io/sturdy-base/`**

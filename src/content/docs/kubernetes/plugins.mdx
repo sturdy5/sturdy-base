@@ -64,10 +64,122 @@ For vendor plugins, check out the Red Hat documentation for the [`oc-compliance`
 
 Now, let's take a look at one that I've written. The purpose of this plugin is to make switching projects using `oc` easier. Namespace names tend to be long and I wanted an easy way to switch to them without typing the whole name.
 
-`oc-fuzz-project.sh`
+`oc-fuzz-project`
 
 ```bash
 #!/bin/bash
+# Fuzz test for OpenShift project names. If a single project is found, then change the context to that project. If multiple are found, prompt the user to select one via an interactive scrolling selector.
 
-# this script is coming soon...
+set -uo pipefail
+
+fuzzProject=${1:-""}
+
+# Interactive selector using arrow keys / j-k / vim-style navigation, similar to
+# the prompts shown by tools like `npx create-*`. Falls back to `fzf` when
+# available for a richer fuzzy-search experience.
+#
+# Usage: selected=$(select_project "$projects")
+select_project() {
+  local options=("$@")
+  local count=${#options[@]}
+
+  # Prefer fzf if it's installed: it already provides a polished, searchable
+  # scrolling selector.
+  if command -v fzf &>/dev/null; then
+    printf '%s\n' "${options[@]}" | fzf --height=~15 --border --prompt="Select project> " --header="Multiple projects found. Use arrows/type to filter, Enter to select."
+    return
+  fi
+
+  # Pure-bash fallback: arrow-key (or j/k) driven menu.
+  local selected=0
+  local key
+  local esc=$'\033'
+
+  # Hide cursor, restore it and terminal state on exit.
+  tput civis
+  trap 'tput cnorm' RETURN
+
+  draw_menu() {
+    local i
+    for ((i = 0; i < count; i++)); do
+      if [ "$i" -eq "$selected" ]; then
+        printf '\033[7m> %s\033[0m\n' "${options[$i]}"
+      else
+        printf '  %s\n' "${options[$i]}"
+      fi
+    done
+  }
+
+  # Print header once, then the initial menu.
+  echo "Multiple projects found. Use arrow keys (or j/k) to navigate, Enter to select." >&2
+  draw_menu >&2
+
+  while true; do
+    IFS= read -rsn1 key
+    if [[ $key == "$esc" ]]; then
+      read -rsn2 -t 0.01 key || true
+      case "$key" in
+        '[A') # up
+          ((selected--))
+          [ "$selected" -lt 0 ] && selected=$((count - 1))
+          ;;
+        '[B') # down
+          ((selected++))
+          [ "$selected" -ge "$count" ] && selected=0
+          ;;
+      esac
+    elif [[ $key == "k" ]]; then
+      ((selected--))
+      [ "$selected" -lt 0 ] && selected=$((count - 1))
+    elif [[ $key == "j" ]]; then
+      ((selected++))
+      [ "$selected" -ge "$count" ] && selected=0
+    elif [[ -z "$key" ]]; then
+      # Enter pressed
+      break
+    fi
+
+    # Move cursor up to redraw the menu in place.
+    printf '\033[%dA' "$count" >&2
+    draw_menu >&2
+  done
+
+  echo "${options[$selected]}"
+}
+
+# check to see if we are logged in
+if ! oc whoami &>/dev/null; then
+  echo "You are not logged in to OpenShift. Please log in and try again."
+  exit 1
+fi
+
+# get the list of projects, searching specifically for the fuzzProject
+projects=$(oc get projects -o json | jq -r '.items[].metadata.name' | grep "$fuzzProject")
+
+# count the number of projects
+project_count=$(echo "$projects" | wc -l)
+
+if [ "$project_count" -eq 1 ]; then
+  # if only one project is found, switch to it, assuming it isn't an empty string
+  if [ -n "$projects" ]; then
+    oc project "$projects"
+  else
+    echo "No project with name matching '$fuzzProject' found."
+    exit 1
+  fi
+elif [ "$project_count" -gt 1 ]; then
+  # if multiple projects are found, prompt the user to select one via an
+  # interactive scrolling selector.
+  mapfile -t project_list <<< "$projects"
+  selected_project=$(select_project "${project_list[@]}")
+  if [ -n "$selected_project" ]; then
+    oc project "$selected_project"
+  else
+    echo "No project selected."
+    exit 1
+  fi
+else
+  echo "No projects with name matching '$fuzzProject' found."
+  exit 1
+fi
 ```
