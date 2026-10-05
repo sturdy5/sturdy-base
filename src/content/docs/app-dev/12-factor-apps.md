@@ -2,7 +2,7 @@
 title: The Twelve-Factor App
 description: Key principles for building modern, cloud-native software applications.
 sidebar:
-  order: 2
+  order: 3
 ---
 
 The Twelve-Factor App methodology is a foundational framework for creating scalable, maintainable web applications and microservices.

@@ -1,6 +1,8 @@
 ---
 title: Application Development
 description: Software engineering principles, modern backend architectures, and developer workflows.
+sidebar:
+  order: 2
 ---
 
 Welcome to the **Application Development** section of Sturdy Base. Here you'll find best practices, patterns, and guides for designing resilient, scalable software applications.
