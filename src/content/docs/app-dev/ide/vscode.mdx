@@ -1,0 +1,84 @@
+---
+title: VSCode
+description: Key information for application development using VSCode.
+sidebar:
+  order: 2
+---
+
+VisialStudio Code, better known as VSCode, is an Integrated Development Environment built by Microsoft. As much as I loath Microsoft, they've actually built a good tool here. By itself, VSCode is a fairly simple IDE. What makes it really stand out is the rich plugin ecosystem.
+
+## Plugin List
+
+The following plugins are my general go-to plugins.
+
+| Plugin | Description |
+|-|-|
+|Dev Containers|This plugin let's you build a container (or use one of Microsoft's pre-built ones) and run VSCode within it. This is my most used plugin. Using this method, I can build out either purpose built development environments, or just a generic development environment that I can use. Check out one of my other repositories for the image I use with this plugin - [dev-container](https://github.com/sturdy5/dev-container).|
+|WSL|This plugin is similar to the previous, but lets you use Windows Subsystem for Linux instead of a container. I use this one much less due to issues with WSL and the VPN I use, but it is still very useful when I'm off the VPN.|
+|Remote - SSH|Yet another similar plugin, but instead of something running locally, it allows you to hook your VSCode to a remote server. At most, I've experimented with this using remote hosting using a provider like Proxmox or AWS.|
+|Excalidraw|I'm a superfan of [Excalidraw](https://excalidraw.com) and use it constantly to build pictures of things I'm working on. This extension allows me to keep a complete notebook of drawings, all local. My drawings render directly in VSCode and makes keeping the drawings separate and managed much easier.|
+
+## Tasks
+
+Depending on your job and the responsibilities you have, there are likely certain tasks that you need to be sure get taken care of on a regular basis. For me, as a product owner, I need to keep an eye on the backlog to make sure stories are ready to work. Additionally, as an OpenShift platform engineer, I need to make sure I keep my sessions alive when connecting to the clusters. For both of these situations, I use VSCode tasks to automatically launch a task when VSCode starts in a certain workspace.
+
+In order to define the tasks that you need to do, you need to create a `.vscode` directory in your workspace. In that directory, create a `tasks.json` file. Here is a representative of the one I use
+
+```json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Backlog - DOR",
+            "type": "shell",
+            "command": "watch -n 600 \"/home/dev/.local/bin/backlog-needs-refinement.sh\"",
+            "options": {
+                "shell": {
+                    "executable": "zsh",
+                    "args": ["-l", "-c"]
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }, {
+            "label": "Keep Sessions",
+            "type": "shell",
+            "command": "/home/dev/workspaces/shell/oc-toolbox/keep-sessions.sh",
+            "options": {
+                "shell": {
+                    "executable": "zsh",
+                    "args": ["-l", "-c"]
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}
+```
+
+In that file, you can see that I have two tasks defined. Both run in terminals - one to keep track of stories on my backlog which provides links to user stories that don't meet our definition of ready (DOR), and the other will keep my OpenShift sessions alive.
+
+Once you have your `tasks.json` file defined, you need to tell VSCode to enable tasks. In VSCode, hit `Ctrl`+`Shift`+`P` and search for `Tasks: Manage Automatic Tasks`. Once you find it, select it and then select `Allow Automatic Tasks`. Next time you restart your workspace, the tasks will automatically launch.
+
+I've never had an issue with the tasks kicking off except for one time - my VSCode had done an update and the tasks needed to be re-enabled. Other updates had gone through with no impact. I'm hoping that is a one-off experience.
+
+Tasks can be a really convenient way to automatically kick off tasks that need to happen every time.
